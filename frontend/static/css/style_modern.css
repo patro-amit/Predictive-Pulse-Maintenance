@@ -347,6 +347,14 @@ header .container {
     font-size: 1.4rem;
 }
 
+#predict-file-btn {
+    display: none;
+}
+
+#predict-file-btn.show {
+    display: inline-flex;
+}
+
 /* ========== SECTIONS ========== */
 section {
     padding: 5rem 0;
@@ -627,6 +635,10 @@ section {
 }
 
 /* ========== MODEL SELECTOR ========== */
+#model-selector-container {
+    margin-bottom: 1.5rem;
+}
+
 .model-selector {
     background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(181, 55, 242, 0.05));
     border: 2px solid rgba(0, 212, 255, 0.3);
