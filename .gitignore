@@ -33,9 +33,7 @@ ENV/
 *.swo
 *~
 
-# Data and models (large files excluded)
-# Note: Data files and models are tracked in Git LFS or separate storage
-backend/models/*.pkl
+# Data and models (large files tracked with Git LFS)
 backend/models/catboost_training.json
 catboost_info/
 
