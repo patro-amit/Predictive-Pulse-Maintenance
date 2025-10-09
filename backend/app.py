@@ -27,13 +27,18 @@ def load_all_models():
     """Load all trained models from the models directory."""
     global FEATURES, LOADED_MODELS
     
-    model_files = ["model.pkl", "random_forest.pkl", "xgboost.pkl", "lightgbm.pkl", 
+    model_files = ["model.pkl", "random_forest.pkl", "xgboost.pkl", 
                    "catboost.pkl", "gradient_boosting.pkl"]
+    
+    print("\n" + "="*70)
+    print("🔄 LOADING MODELS...")
+    print("="*70)
     
     for model_file in model_files:
         model_path = os.path.join(MODELS_DIR, model_file)
         if os.path.exists(model_path):
             try:
+                print(f"\n📂 Loading {model_file}...")
                 bundle = joblib.load(model_path)
                 model_name = model_file.replace(".pkl", "")
                 LOADED_MODELS[model_name] = bundle
@@ -42,9 +47,21 @@ def load_all_models():
                 if FEATURES is None:
                     FEATURES = bundle.get("features", [])
                 
-                print(f"✅ Loaded model: {model_name}")
+                # Show model metrics
+                metrics = bundle.get("metrics", {})
+                accuracy = metrics.get("accuracy", 0)
+                print(f"✅ SUCCESS: {model_name}")
+                print(f"   Accuracy: {accuracy*100:.2f}%")
+                
             except Exception as e:
-                print(f"⚠️  Failed to load {model_file}: {e}")
+                print(f"❌ FAILED to load {model_file}")
+                print(f"   Error type: {type(e).__name__}")
+                print(f"   Error message: {str(e)}")
+                import traceback
+                print(f"   Full traceback:")
+                traceback.print_exc()
+        else:
+            print(f"⚠️  File not found: {model_file}")
     
     # Try loading feature list if FEATURES is still None
     if FEATURES is None:
@@ -53,8 +70,10 @@ def load_all_models():
             with open(feats_path) as f:
                 FEATURES = json.load(f)
     
-    print(f"\nLoaded {len(LOADED_MODELS)} models: {list(LOADED_MODELS.keys())}")
-    print(f"Features count: {len(FEATURES) if FEATURES else 0}")
+    print("\n" + "="*70)
+    print(f"✅ LOADED {len(LOADED_MODELS)} MODELS: {list(LOADED_MODELS.keys())}")
+    print(f"📊 Features count: {len(FEATURES) if FEATURES else 0}")
+    print("="*70 + "\n")
 
 # Load models on startup
 load_all_models()
