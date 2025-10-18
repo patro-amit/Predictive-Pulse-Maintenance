@@ -1,5 +1,4 @@
 [
-  "cycle",
   "setting1",
   "setting2",
   "setting3",
@@ -27,5 +26,20 @@
   "temp_avg",
   "pressure_avg",
   "vibration_avg",
-  "rpm_avg"
+  "rpm_avg",
+  "temp_pressure_ratio",
+  "vibration_rpm_ratio",
+  "temp_vibration",
+  "pressure_rpm",
+  "temp_rpm",
+  "temp_squared",
+  "vibration_squared",
+  "temp_rolling_std",
+  "pressure_rolling_std",
+  "vibration_rolling_mean",
+  "rpm_rolling_max",
+  "temp_rolling_mean",
+  "sensor_std",
+  "sensor_range",
+  "sensor_mean"
 ]

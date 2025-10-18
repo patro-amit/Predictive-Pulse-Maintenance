@@ -38,6 +38,10 @@ def create_radar_comparison():
     data_path = Path(__file__).parent.parent / 'backend' / 'models' / 'model_comparison.csv'
     df = pd.read_csv(data_path)
     
+    # Parse accuracy - handle percentage strings
+    if df['accuracy'].dtype == 'object':
+        df['accuracy'] = df['accuracy'].str.rstrip('%').astype(float) / 100
+    
     # Metrics to compare (normalized to 0-1 scale)
     metrics = ['accuracy', 'f1', 'auroc', 'precision', 'recall']
     metric_labels = ['Accuracy', 'F1-Score', 'AUROC', 'Precision', 'Recall']

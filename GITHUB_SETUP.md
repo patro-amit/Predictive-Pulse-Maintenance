@@ -2,17 +2,17 @@
 
 ## 🚀 Quick Setup Guide
 
-Your project is ready to push to GitHub! Follow these steps:
+Your predictive maintenance project is ready to push to GitHub! Follow these steps:
 
 ### Step 1: Create Repository on GitHub
 
 1. Go to: **https://github.com/new**
 2. Fill in the details:
    - **Repository name:** `Predictive-Pulse-Maintenance`
-   - **Description:** `Predictive Maintenance using Big Data & Machine Learning - 92%+ accuracy with Random Forest, XGBoost, Gradient Boosting, and CatBoost models`
-   - **Visibility:** Public (recommended) or Private
-   - **⚠️ IMPORTANT:** Do NOT check "Add a README file" (we already have one)
-   - **⚠️ IMPORTANT:** Do NOT add .gitignore or license (we already have them)
+   - **Description:** `Intelligent Predictive Maintenance System using Big Data & Machine Learning - 94.06% accuracy with CatBoost on NASA C-MAPSS dataset. Features Apache Spark & MongoDB integration.`
+   - **Visibility:** Public (recommended for portfolio) or Private
+   - **⚠️ IMPORTANT:** Do NOT check "Add a README file" (we already have a comprehensive one)
+   - **⚠️ IMPORTANT:** Do NOT add .gitignore or license (already configured)
 3. Click **"Create repository"**
 
 ### Step 2: Push Your Code
@@ -40,62 +40,63 @@ You should see all your files uploaded!
 
 ## 📊 Project Summary
 
-### What's Uploaded (935 MB total):
-✅ Source code (Backend + Frontend)
-✅ Training scripts (29 files)
-✅ Datasets (44,511 samples, 28 MB)
-✅ Configuration files
-✅ README.md with project documentation
+### What's Included:
+✅ **Source code** - Backend (FastAPI) + Frontend (HTML/CSS/JS)
+✅ **ML Models** - 4 trained models (.pkl files)
+✅ **Training scripts** - Complete training pipeline
+✅ **Datasets** - NASA C-MAPSS data (44,511 samples)
+✅ **Configuration** - Requirements, shell scripts, configs
+✅ **Documentation** - Comprehensive README.md
 
-### What's Excluded:
-❌ Virtual environment (`.venv/` - 533 MB)
-❌ Model files (`*.pkl` - 373 MB)
-❌ Cache files (`__pycache__/`)
+### What's Excluded (via .gitignore):
+❌ Virtual environment (`.venv/` directory)
+❌ Python cache files (`__pycache__/`)
+❌ Jupyter checkpoints (`.ipynb_checkpoints/`)
+❌ System files (`.DS_Store`, `Thumbs.db`)
+❌ Log files (`*.log`, `nohup.out`)
+❌ IDE settings (`.vscode/`, `.idea/`)
 
-### Why Models are Excluded:
-GitHub has a 100 MB file size limit. Your trained models (373 MB) exceed this.
-
-**Solutions:**
-1. **Users retrain models** - Run `python scripts/train.py --csv data/predictive_maintenance_bigdata.csv --label label --group unit`
-2. **Use Git LFS** - Upload large files separately
-3. **Host elsewhere** - Google Drive, Dropbox, GitHub Releases
-
----
-
-## 🔄 Alternative: Use Git LFS for Models
-
-If you want to include the trained models:
-
-```bash
-# Install Git LFS
-brew install git-lfs
-git lfs install
-
-# Track model files
-git lfs track "backend/models/*.pkl"
-git add .gitattributes
-git add backend/models/*.pkl
-git commit -m "Add trained models via Git LFS"
-git push
+### Project Structure:
+```
+Predictive-Pulse-Maintenance/
+├── backend/           # FastAPI server
+│   ├── app.py        # Main application
+│   ├── models/       # Trained ML models (4 .pkl files)
+│   └── requirements.txt
+├── frontend/         # Web interface
+│   ├── static/       # CSS & JavaScript
+│   └── templates/    # HTML templates
+├── data/            # Training datasets
+├── scripts/         # Training & visualization scripts
+├── bin/             # Shell scripts
+├── README.md        # Main documentation
+└── GITHUB_SETUP.md  # This file
 ```
 
 ---
 
-## ✅ Commit Summary
+## 🎯 Current System Status
 
-**Initial commit includes:**
-- 59 files
-- 63,723 lines of code
-- FastAPI backend with 5 ML models
-- Modern web UI
-- Complete training pipeline
-- 13 visualization scripts
+### Models Performance:
+- **CatBoost:** 94.06% accuracy (Best Model) 🏆
+- **XGBoost:** 94.04% accuracy
+- **Gradient Boosting:** 93.54% accuracy
+- **Random Forest:** 91.24% accuracy
 
-**Models Included:**
-- Random Forest: 92.26% accuracy
-- XGBoost: 92.10% accuracy
-- Gradient Boosting: 92.16% accuracy
-- CatBoost: 91.34% accuracy
+### Features:
+- 43 total features (21 sensors + 3 settings + 19 engineered)
+- Feature engineering pipeline with ratios, interactions, rolling stats
+- Real-time predictions with <100ms latency
+- Scenario-based testing (Normal, High Risk, Critical)
+- Apache Spark integration for big data processing
+- MongoDB integration for prediction storage
+
+### Recent Updates (October 18, 2025):
+- ✅ Fixed normal operation predictions
+- ✅ Adjusted sensor value ranges for realistic scenarios
+- ✅ Updated frontend cache version (v8.0)
+- ✅ Cleaned up documentation files
+- ✅ Enhanced README with comprehensive information
 
 ---
 
@@ -121,13 +122,103 @@ git remote set-url origin https://github.com/shyampatro/Predictive-Pulse-Mainten
 
 ## 📝 After Upload
 
-Add these badges to your README.md:
+### Verify Your Repository
+1. Visit: `https://github.com/YOUR_USERNAME/Predictive-Pulse-Maintenance`
+2. Check that all files are uploaded
+3. README.md should display properly with badges
+4. Test clone: `git clone https://github.com/YOUR_USERNAME/Predictive-Pulse-Maintenance.git`
 
-```markdown
-![Python](https://img.shields.io/badge/python-3.13-blue.svg)
-![Accuracy](https://img.shields.io/badge/accuracy-92.26%25-success.svg)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-green.svg)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
+### Repository Features to Enable
+- ✅ **Issues** - Track bugs and features
+- ✅ **Wiki** - Extended documentation
+- ✅ **Discussions** - Community Q&A
+- ✅ **Topics** - Add tags: `machine-learning`, `predictive-maintenance`, `fastapi`, `big-data`, `apache-spark`, `mongodb`
+
+### Add Repository Description
+Navigate to Settings and add keywords:
+- `predictive-maintenance`
+- `machine-learning`
+- `fastapi`
+- `xgboost`
+- `catboost`
+- `apache-spark`
+- `mongodb`
+- `nasa-cmapss`
+- `industrial-iot`
+- `python`
+
+---
+
+## 🎓 For Academic Use
+
+### Citing This Project
+```
+Predictive Maintenance System using Machine Learning
+Dataset: NASA C-MAPSS Turbofan Engine Degradation
+Accuracy: 94.06% (CatBoost Ensemble Model)
+Features: 43 (21 sensors + 3 settings + 19 engineered)
+GitHub: https://github.com/YOUR_USERNAME/Predictive-Pulse-Maintenance
 ```
 
-Happy coding! 🚀
+### Project Highlights for Portfolio
+- Production-ready FastAPI application
+- 94.06% accuracy on real-world NASA dataset
+- Big Data integration (Apache Spark + MongoDB)
+- Modern responsive web interface
+- Comprehensive feature engineering pipeline
+- RESTful API with Swagger documentation
+
+---
+
+## 🔐 Security Notes
+
+### Sensitive Information
+Before pushing, ensure no sensitive data is committed:
+- ✅ No API keys or passwords in code
+- ✅ No personal data in datasets
+- ✅ No production database credentials
+- ✅ Virtual environment excluded
+
+### .gitignore is configured to exclude:
+```
+.venv/
+__pycache__/
+*.pyc
+*.log
+.DS_Store
+.env
+*.key
+```
+
+---
+
+## 🚀 Next Steps After Upload
+
+1. **Star Your Own Repo** - Makes it easier to find
+2. **Add README Badges** - Already included in README.md
+3. **Write a Good Description** - Highlight 94% accuracy and Big Data
+4. **Add Topics/Tags** - Helps with discovery
+5. **Share** - Add link to resume/portfolio
+6. **Keep Updated** - Push improvements regularly
+
+---
+
+## 📞 Support
+
+**Issues with GitHub Setup?**
+- Authenticate with Personal Access Token (not password)
+- Generate at: https://github.com/settings/tokens
+- Use HTTPS (easier) or SSH (more secure)
+
+**Repository Already Exists?**
+```bash
+# Update existing repository
+git remote set-url origin https://github.com/YOUR_USERNAME/Predictive-Pulse-Maintenance.git
+git push -u origin main --force  # Use with caution!
+```
+
+---
+
+**Happy Coding & Good Luck with Your Project!** 🚀⚙️
+
+**Last Updated:** October 18, 2025

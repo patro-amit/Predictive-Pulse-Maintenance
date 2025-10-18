@@ -39,6 +39,10 @@ def create_confusion_matrices():
     data_path = Path(__file__).parent.parent / 'backend' / 'models' / 'model_comparison.csv'
     df = pd.read_csv(data_path)
     
+    # Parse accuracy - handle percentage strings
+    if df['accuracy'].dtype == 'object':
+        df['accuracy'] = df['accuracy'].str.rstrip('%').astype(float) / 100
+    
     # ═══════════════════════════════════════════════════════════════════════════
     # FIGURE CREATION (4 Subplots in 2x2 Grid)
     # ═══════════════════════════════════════════════════════════════════════════

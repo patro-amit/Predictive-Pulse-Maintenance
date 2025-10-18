@@ -40,7 +40,14 @@ def create_accuracy_comparison():
     
     # Prepare data
     models = df['model_name'].str.replace('_', ' ').str.title()
-    accuracy = df['accuracy'] * 100
+    
+    # Parse accuracy - handle both percentage strings and decimals
+    if df['accuracy'].dtype == 'object':
+        accuracy = df['accuracy'].str.rstrip('%').astype(float)
+    else:
+        accuracy = df['accuracy'] * 100
+    
+    # Parse F1 score
     f1_score = df['f1'] * 100
     
     # ═══════════════════════════════════════════════════════════════════════════

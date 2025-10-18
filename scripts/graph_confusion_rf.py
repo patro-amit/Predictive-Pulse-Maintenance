@@ -24,6 +24,10 @@ def create_rf_confusion_matrix():
     data_path = Path(__file__).parent.parent / 'backend' / 'models' / 'model_comparison.csv'
     df = pd.read_csv(data_path)
     
+    # Parse accuracy - handle percentage strings
+    if df['accuracy'].dtype == 'object':
+        df['accuracy'] = df['accuracy'].str.rstrip('%').astype(float) / 100
+    
     # Get Random Forest data
     rf_data = df[df['model_name'] == 'random_forest'].iloc[0]
     

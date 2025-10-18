@@ -5,7 +5,7 @@ const API_URL = window.location.origin;
 let modelsData = [];
 let featuresData = [];
 let uploadedFile = null;
-let selectedModel = null; // Track selected model
+let selectedModel = 'gradient_boosting'; // Default to gradient_boosting (best balance)
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', async () => {
@@ -93,7 +93,7 @@ function renderModelCards() {
         const isBest = index === 0;
         const isSelected = selectedModel === model.name;
         const card = document.createElement('div');
-        card.className = `model-card ${isBest ? 'best' : ''} ${isSelected ? 'selected' : ''}`;
+        card.className = `model-card ${isSelected ? 'selected' : ''}`;
         card.onclick = () => selectModel(model.name);
         
         card.innerHTML = `
@@ -101,7 +101,6 @@ function renderModelCards() {
                 <div class="model-name">
                     <i class="fas fa-brain"></i> ${model.name.replace('_', ' ').toUpperCase()}
                 </div>
-                ${isBest ? '<span class="best-badge">🏆 Best</span>' : ''}
                 ${isSelected ? '<span class="selected-badge">✓ Selected</span>' : ''}
             </div>
             <div class="model-metrics">
@@ -172,7 +171,8 @@ function renderModelSelector() {
         </p>
         <div class="model-options">
             ${modelsData.map((model, index) => {
-                const isSelected = selectedModel === model.name || (index === 0 && !selectedModel);
+                // Default to gradient_boosting for best practical results
+                const isSelected = selectedModel === model.name;
                 return `
                     <div class="model-option ${isSelected ? 'selected' : ''}" 
                          data-model="${model.name}"
@@ -633,59 +633,139 @@ function parseCSV(text) {
     return inputs;
 }
 
-// Generate random value based on feature name
-function generateRandomValue(featureName) {
+// Generate random value based on feature name and scenario
+// Based on ACTUAL failure patterns from NASA C-MAPSS dataset
+function generateRandomValue(featureName, scenario = 'normal') {
     const name = featureName.toLowerCase();
     
-    // Temperature (15-40°C)
-    if (name.includes('temp')) {
-        return (15 + Math.random() * 25).toFixed(2);
+    // Key failure indicators from dataset analysis:
+    // s9, s11, s12, s20 are MUCH HIGHER in failures (2-3x normal)
+    // s7, s14, s21 are LOWER in failures
+    // s1-s4 slightly higher in failures
+    
+    // Settings
+    if (name === 'setting1') {
+        return (0.2 + Math.random() * 0.2).toFixed(6);
     }
-    // Pressure (95-110 kPa)
-    else if (name.includes('pressure')) {
-        return (95 + Math.random() * 15).toFixed(2);
+    if (name === 'setting2') {
+        return (-0.06 + Math.random() * 0.06).toFixed(6);
     }
-    // Vibration (0.01-0.15 mm/s)
-    else if (name.includes('vibration')) {
-        return (0.01 + Math.random() * 0.14).toFixed(3);
+    if (name === 'setting3') {
+        return (95 + Math.random() * 10).toFixed(2);
     }
-    // RPM (1000-2000)
-    else if (name.includes('rpm')) {
-        return Math.floor(1000 + Math.random() * 1000);
+    
+    // Sensor-specific patterns (from dataset analysis)
+    // s1-s4: slightly higher in failures
+    if (['s1', 's2', 's3', 's4'].includes(name)) {
+        if (scenario === 'normal') {
+            return (95 + Math.random() * 15).toFixed(2);  // 95-110 normal
+        } else if (scenario === 'high_risk') {
+            return (100 + Math.random() * 15).toFixed(2);  // 100-115 elevated
+        } else {
+            return (105 + Math.random() * 20).toFixed(2);  // 105-125 high
+        }
     }
-    // Cycle (50-300)
-    else if (name.includes('cycle')) {
-        return Math.floor(50 + Math.random() * 250);
+    
+    // s7: LOWER in failures
+    if (name === 's7') {
+        if (scenario === 'normal') {
+            return (46 + Math.random() * 6).toFixed(2);  // 46-52 normal
+        } else if (scenario === 'high_risk') {
+            return (44 + Math.random() * 5).toFixed(2);  // 44-49 low
+        } else {
+            return (42 + Math.random() * 4).toFixed(2);  // 42-46 very low
+        }
     }
-    // Operating hours (1000-8000)
-    else if (name.includes('hour')) {
-        return Math.floor(1000 + Math.random() * 7000);
+    
+    // s9, s11, s12: MUCH HIGHER in failures (KEY INDICATORS!)
+    if (['s9', 's11', 's12'].includes(name)) {
+        if (scenario === 'normal') {
+            // Based on bigdata CSV: s9 mean=0.86, s11 mean=0.95, s12 mean=1.21
+            // Normal range: mean ± 0.5*std (healthy operation)
+            if (name === 's9') return (0.4 + Math.random() * 0.9).toFixed(2);  // 0.4-1.3 (around mean 0.86)
+            if (name === 's11') return (0.4 + Math.random() * 1.1).toFixed(2);  // 0.4-1.5 (around mean 0.95)
+            if (name === 's12') return (0.6 + Math.random() * 1.2).toFixed(2);  // 0.6-1.8 (around mean 1.21)
+        } else if (scenario === 'high_risk') {
+            return (1.5 + Math.random() * 1.5).toFixed(2);  // 1.5-3.0 high
+        } else {
+            return (2.5 + Math.random() * 2.0).toFixed(2);  // 2.5-4.5 critical
+        }
     }
-    // Age (1-48 months)
-    else if (name.includes('age')) {
-        return Math.floor(1 + Math.random() * 47);
+    
+    // s14: Lower in failures
+    if (name === 's14') {
+        if (scenario === 'normal') {
+            return (3000 + Math.random() * 400).toFixed(2);  // 3000-3400 normal
+        } else if (scenario === 'high_risk') {
+            return (2900 + Math.random() * 300).toFixed(2);  // 2900-3200 low
+        } else {
+            return (2700 + Math.random() * 300).toFixed(2);  // 2700-3000 very low
+        }
     }
-    // Load factor (0.5-1.0)
-    else if (name.includes('load')) {
-        return (0.5 + Math.random() * 0.5).toFixed(2);
+    
+    // s20: HIGHER in failures (KEY INDICATOR!)
+    if (name === 's20') {
+        if (scenario === 'normal') {
+            // Based on bigdata CSV: s20 mean=0.32, std=0.39
+            // Normal range: mean ± 0.3*std (healthy operation)
+            return (0.20 + Math.random() * 0.25).toFixed(2);  // 0.20-0.45 (around mean 0.32)
+        } else if (scenario === 'high_risk') {
+            return (0.5 + Math.random() * 0.4).toFixed(2);  // 0.5-0.9 high
+        } else {
+            return (0.8 + Math.random() * 0.5).toFixed(2);  // 0.8-1.3 critical
+        }
     }
-    // Generic (10-100)
-    else {
-        return (10 + Math.random() * 90).toFixed(2);
+    
+    // s21: LOWER in failures
+    if (name === 's21') {
+        if (scenario === 'normal') {
+            return (95 + Math.random() * 15).toFixed(2);  // 95-110 normal
+        } else if (scenario === 'high_risk') {
+            return (90 + Math.random() * 12).toFixed(2);  // 90-102 low
+        } else {
+            return (85 + Math.random() * 10).toFixed(2);  // 85-95 very low
+        }
+    }
+    
+    // Other sensors (s5, s6, s8, s10, s13, s15-s19): moderate changes
+    if (name.startsWith('s') && name.length <= 3) {
+        if (scenario === 'normal') {
+            return (85 + Math.random() * 30).toFixed(2);  // 85-115
+        } else if (scenario === 'high_risk') {
+            return (80 + Math.random() * 35).toFixed(2);  // 80-115
+        } else {
+            return (75 + Math.random() * 40).toFixed(2);  // 75-115
+        }
+    }
+    
+    // Generic fallback
+    if (scenario === 'normal') {
+        return (50 + Math.random() * 50).toFixed(2);
+    } else if (scenario === 'high_risk') {
+        return (40 + Math.random() * 60).toFixed(2);
+    } else {
+        return (30 + Math.random() * 70).toFixed(2);
     }
 }
 
-// Load example data with RANDOM values
-async function loadExample() {
+// Load example data with selected scenario
+async function loadExample(scenario = null) {
     showLoading();
     
     try {
-        // Generate random values for all features
+        // If no scenario provided, show selection dialog
+        if (!scenario) {
+            hideLoading();
+            showScenarioDialog();
+            return;
+        }
+        
+        // Generate values based on scenario
         let fieldsPopulated = 0;
         featuresData.forEach(feature => {
             const input = document.getElementById(`input-${feature.name}`);
             if (input) {
-                input.value = generateRandomValue(feature.name);
+                input.value = generateRandomValue(feature.name, scenario);
                 fieldsPopulated++;
             }
         });
@@ -700,17 +780,68 @@ async function loadExample() {
         
         hideLoading();
         
-        // Show notification instead of alert
+        // Show notification
+        const scenarioNames = {
+            'normal': 'Normal Operating Conditions',
+            'high_risk': 'High Risk - Abnormal Readings',
+            'critical': 'Critical - Failure Imminent'
+        };
+        
         showNotification(
-            '✅ Random example data generated!', 
-            `${fieldsPopulated} sensor values populated with realistic random data. Click "Predict Maintenance" to see results.`
+            '✅ Sample data generated!', 
+            `${fieldsPopulated} sensor values populated with ${scenarioNames[scenario]}. Click "Predict Maintenance" to see results.`
         );
         
-        console.log(`✅ Example data loaded: ${fieldsPopulated} fields populated`);
+        console.log(`✅ Example data loaded: ${fieldsPopulated} fields populated (${scenario} scenario)`);
     } catch (error) {
         console.error('Error loading example:', error);
         showNotification('❌ Error', error.message);
         hideLoading();
+    }
+}
+
+// Show scenario selection dialog
+function showScenarioDialog() {
+    const dialog = document.createElement('div');
+    dialog.className = 'scenario-dialog-overlay';
+    dialog.innerHTML = `
+        <div class="scenario-dialog">
+            <h3>Select Sample Data Scenario</h3>
+            <p>Choose the type of sample data to generate:</p>
+            <div class="scenario-options">
+                <button class="scenario-btn normal" onclick="selectScenario('normal')">
+                    <i class="fas fa-check-circle"></i>
+                    <strong>Normal Operation</strong>
+                    <span>Healthy machine, no maintenance needed</span>
+                </button>
+                <button class="scenario-btn high-risk" onclick="selectScenario('high_risk')">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>High Risk</strong>
+                    <span>Abnormal readings, maintenance may be needed</span>
+                </button>
+                <button class="scenario-btn critical" onclick="selectScenario('critical')">
+                    <i class="fas fa-times-circle"></i>
+                    <strong>Critical Failure</strong>
+                    <span>Extreme values, failure imminent</span>
+                </button>
+            </div>
+            <button class="cancel-btn" onclick="closeScenarioDialog()">Cancel</button>
+        </div>
+    `;
+    document.body.appendChild(dialog);
+}
+
+// Select scenario and close dialog
+function selectScenario(scenario) {
+    closeScenarioDialog();
+    loadExample(scenario);
+}
+
+// Close scenario dialog
+function closeScenarioDialog() {
+    const dialog = document.querySelector('.scenario-dialog-overlay');
+    if (dialog) {
+        dialog.remove();
     }
 }
 

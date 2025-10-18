@@ -39,6 +39,10 @@ def create_classification_heatmap():
     data_path = Path(__file__).parent.parent / 'backend' / 'models' / 'model_comparison.csv'
     df = pd.read_csv(data_path)
     
+    # Parse accuracy - handle percentage strings
+    if df['accuracy'].dtype == 'object':
+        df['accuracy'] = df['accuracy'].str.rstrip('%').astype(float) / 100
+    
     # Prepare data for heatmap
     models = df['model_name'].str.replace('_', ' ').str.title().tolist()
     metrics = ['Accuracy', 'Precision', 'Recall', 'F1-Score', 'AUROC']
