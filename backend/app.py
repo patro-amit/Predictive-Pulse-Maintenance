@@ -59,7 +59,7 @@ BASE = os.path.dirname(__file__)
 MODELS_DIR = os.path.join(BASE, "models")
 FRONTEND_DIR = os.path.join(os.path.dirname(BASE), "frontend")
 
-# Load all available models
+# Load all available models      // .\run_app.bat
 LOADED_MODELS = {}
 FEATURES = None
 
