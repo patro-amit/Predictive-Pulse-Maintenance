@@ -24,7 +24,7 @@ import numpy as np
 import pandas as pd
 import json
 import os
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from datetime import datetime
 import time
 
@@ -42,17 +42,8 @@ try:
 except ImportError:
     SPARK_AVAILABLE = False
     print("⚠️  Apache Spark not available")
-from fastapi import FastAPI, HTTPException
+
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse
-from pydantic import BaseModel
-from typing import List, Dict, Any, Optional
-import os
-import json
-import joblib
-import pandas as pd
-import numpy as np
 from pathlib import Path
 
 BASE = os.path.dirname(__file__)

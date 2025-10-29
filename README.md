@@ -21,7 +21,13 @@
 ./run_app.sh
 ```
 
-### Option 2: Manual Start
+### Option 2: Background Service (Auto-start on boot)
+```bash
+./services/service_install.sh
+```
+Service will run at http://localhost:8010 automatically. See [services/README.md](services/README.md) for details.
+
+### Option 3: Manual Start
 ```bash
 # Activate virtual environment
 source .venv/bin/activate
@@ -30,7 +36,7 @@ source .venv/bin/activate
 python backend/app.py
 ```
 
-### Option 3: Using Python Directly
+### Option 4: Using Python Directly
 ```bash
 .venv/bin/python backend/app.py
 ```
@@ -108,6 +114,14 @@ Predictive-Pulse-Maintenance/
 │   ├── graph1.sh - graph8.sh    ← Easy graph runners
 │   ├── run_graphs.sh            ← Graph help
 │   └── start.sh                 ← Server starter
+│
+├── services/                      ← Background service management
+│   ├── README.md                ← Service documentation
+│   ├── service_install.sh       ← Install macOS service
+│   ├── service_status.sh        ← Check service status
+│   ├── service_stop.sh          ← Stop service
+│   ├── service_uninstall.sh     ← Remove service
+│   └── com.predictive.maintenance.plist ← LaunchAgent config
 │
 └── docs/                          ← Documentation
     ├── QUICKSTART.md            ← 5-min setup
