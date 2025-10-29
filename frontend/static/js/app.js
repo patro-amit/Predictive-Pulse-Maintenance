@@ -634,117 +634,74 @@ function parseCSV(text) {
 }
 
 // Generate random value based on feature name and scenario
-// Based on ACTUAL failure patterns from NASA C-MAPSS dataset
+// CRITICAL: Data is NORMALIZED/STANDARDIZED (mean≈0, std≈1), NOT raw sensor values!
+// Based on ACTUAL statistics from NASA C-MAPSS training data (normalized values)
 function generateRandomValue(featureName, scenario = 'normal') {
     const name = featureName.toLowerCase();
     
-    // Key failure indicators from dataset analysis:
-    // s9, s11, s12, s20 are MUCH HIGHER in failures (2-3x normal)
-    // s7, s14, s21 are LOWER in failures
-    // s1-s4 slightly higher in failures
-    
-    // Settings
-    if (name === 'setting1') {
-        return (0.2 + Math.random() * 0.2).toFixed(6);
-    }
-    if (name === 'setting2') {
-        return (-0.06 + Math.random() * 0.06).toFixed(6);
-    }
-    if (name === 'setting3') {
-        return (95 + Math.random() * 10).toFixed(2);
-    }
-    
-    // Sensor-specific patterns (from dataset analysis)
-    // s1-s4: slightly higher in failures
-    if (['s1', 's2', 's3', 's4'].includes(name)) {
+    // Settings: normalized values around 0
+    if (name === 'setting1' || name === 'setting2' || name === 'setting3') {
         if (scenario === 'normal') {
-            return (95 + Math.random() * 15).toFixed(2);  // 95-110 normal
+            return (Math.random() * 0.6 - 0.3).toFixed(4);  // -0.3 to 0.3
         } else if (scenario === 'high_risk') {
-            return (100 + Math.random() * 15).toFixed(2);  // 100-115 elevated
+            return (Math.random() * 1.5 - 0.3).toFixed(4);  // -0.3 to 1.2
         } else {
-            return (105 + Math.random() * 20).toFixed(2);  // 105-125 high
+            return (Math.random() * 2.0 + 0.5).toFixed(4);  // 0.5 to 2.5
         }
     }
     
-    // s7: LOWER in failures
-    if (name === 's7') {
+    // KEY FAILURE INDICATORS (from normalized training data):
+    // Working machines (label=0): s2≈1.24, s9≈0.002, s12≈1.04
+    // Failing machines (label=1): s2≈2.76, s9≈0.036, s12≈2.24
+    
+    if (name === 's2') {
         if (scenario === 'normal') {
-            return (46 + Math.random() * 6).toFixed(2);  // 46-52 normal
+            return (0.5 + Math.random() * 1.5).toFixed(4);  // 0.5-2.0 (healthy: mean≈1.24)
         } else if (scenario === 'high_risk') {
-            return (44 + Math.random() * 5).toFixed(2);  // 44-49 low
+            return (2.5 + Math.random() * 1.5).toFixed(4);  // 2.5-4.0
         } else {
-            return (42 + Math.random() * 4).toFixed(2);  // 42-46 very low
+            return (4.0 + Math.random() * 3.0).toFixed(4);  // 4.0-7.0 (critical)
         }
     }
     
-    // s9, s11, s12: MUCH HIGHER in failures (KEY INDICATORS!)
-    if (['s9', 's11', 's12'].includes(name)) {
+    if (name === 's9') {
         if (scenario === 'normal') {
-            // Based on bigdata CSV: s9 mean=0.86, s11 mean=0.95, s12 mean=1.21
-            // Normal range: mean ± 0.5*std (healthy operation)
-            if (name === 's9') return (0.4 + Math.random() * 0.9).toFixed(2);  // 0.4-1.3 (around mean 0.86)
-            if (name === 's11') return (0.4 + Math.random() * 1.1).toFixed(2);  // 0.4-1.5 (around mean 0.95)
-            if (name === 's12') return (0.6 + Math.random() * 1.2).toFixed(2);  // 0.6-1.8 (around mean 1.21)
+            return (-0.01 + Math.random() * 0.02).toFixed(4);  // -0.01 to 0.01 (healthy: mean≈0.002)
         } else if (scenario === 'high_risk') {
-            return (1.5 + Math.random() * 1.5).toFixed(2);  // 1.5-3.0 high
+            return (0.04 + Math.random() * 0.06).toFixed(4);  // 0.04-0.10
         } else {
-            return (2.5 + Math.random() * 2.0).toFixed(2);  // 2.5-4.5 critical
+            return (0.10 + Math.random() * 0.15).toFixed(4);  // 0.10-0.25 (critical)
         }
     }
     
-    // s14: Lower in failures
-    if (name === 's14') {
+    if (name === 's12') {
         if (scenario === 'normal') {
-            return (3000 + Math.random() * 400).toFixed(2);  // 3000-3400 normal
+            return (0.5 + Math.random() * 1.0).toFixed(4);  // 0.5-1.5 (healthy: mean≈1.04)
         } else if (scenario === 'high_risk') {
-            return (2900 + Math.random() * 300).toFixed(2);  // 2900-3200 low
+            return (2.5 + Math.random() * 1.5).toFixed(4);  // 2.5-4.0
         } else {
-            return (2700 + Math.random() * 300).toFixed(2);  // 2700-3000 very low
+            return (4.0 + Math.random() * 3.0).toFixed(4);  // 4.0-7.0 (critical)
         }
     }
     
-    // s20: HIGHER in failures (KEY INDICATOR!)
-    if (name === 's20') {
-        if (scenario === 'normal') {
-            // Based on bigdata CSV: s20 mean=0.32, std=0.39
-            // Normal range: mean ± 0.3*std (healthy operation)
-            return (0.20 + Math.random() * 0.25).toFixed(2);  // 0.20-0.45 (around mean 0.32)
-        } else if (scenario === 'high_risk') {
-            return (0.5 + Math.random() * 0.4).toFixed(2);  // 0.5-0.9 high
-        } else {
-            return (0.8 + Math.random() * 0.5).toFixed(2);  // 0.8-1.3 critical
-        }
-    }
-    
-    // s21: LOWER in failures
-    if (name === 's21') {
-        if (scenario === 'normal') {
-            return (95 + Math.random() * 15).toFixed(2);  // 95-110 normal
-        } else if (scenario === 'high_risk') {
-            return (90 + Math.random() * 12).toFixed(2);  // 90-102 low
-        } else {
-            return (85 + Math.random() * 10).toFixed(2);  // 85-95 very low
-        }
-    }
-    
-    // Other sensors (s5, s6, s8, s10, s13, s15-s19): moderate changes
+    // All other sensors: normalized values around 0
     if (name.startsWith('s') && name.length <= 3) {
         if (scenario === 'normal') {
-            return (85 + Math.random() * 30).toFixed(2);  // 85-115
+            return (Math.random() * 1.0 - 0.5).toFixed(4);  // -0.5 to 0.5 (normal operation)
         } else if (scenario === 'high_risk') {
-            return (80 + Math.random() * 35).toFixed(2);  // 80-115
+            return (Math.random() * 2.5 - 0.5).toFixed(4);  // -0.5 to 2.0
         } else {
-            return (75 + Math.random() * 40).toFixed(2);  // 75-115
+            return (Math.random() * 4.0).toFixed(4);  // 0 to 4.0 (critical)
         }
     }
     
-    // Generic fallback
+    // Engineered features: also normalized
     if (scenario === 'normal') {
-        return (50 + Math.random() * 50).toFixed(2);
+        return (Math.random() * 2.0 - 1.0).toFixed(4);  // -1.0 to 1.0
     } else if (scenario === 'high_risk') {
-        return (40 + Math.random() * 60).toFixed(2);
-    } else {
-        return (30 + Math.random() * 70).toFixed(2);
+        return (Math.random() * 4.0 - 1.0).toFixed(4);  // -1.0 to 3.0
+        } else {
+        return (Math.random() * 6.0).toFixed(4);  // 0 to 6.0
     }
 }
 
